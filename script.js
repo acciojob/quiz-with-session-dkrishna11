@@ -1,84 +1,70 @@
-//your JS code here.
-function saveProgress(option) {
-  // Retrieve the current progress from sessionStorage or initialize an empty array
-  let progress = JSON.parse(sessionStorage.getItem('progress')) || [];
+// Do not change code above this line
 
-  // Add the selected option to the progress array
-  progress.push(option);
+// Array to store user answers
+const userAnswers = [];
 
-  // Save the updated progress back to sessionStorage
-  sessionStorage.setItem('progress', JSON.stringify(progress));
+// Function to handle radio button selection
+function handleSelection(event) {
+  const selectedOption = event.target.value;
+  const questionIndex = event.target.name.split('-')[1];
+  userAnswers[questionIndex] = selectedOption;
+
+  // Save the selected option to progress in sessionStorage
+  saveProgress(selectedOption);
 }
 
-// Function to retrieve progress from sessionStorage
-function getProgress() {
-  // Retrieve the progress from sessionStorage
-  let progress = JSON.parse(sessionStorage.getItem('progress')) || [];
+// Add event listeners to radio buttons
+const radioButtons = document.querySelectorAll('input[type="radio"]');
+radioButtons.forEach((radioButton) => {
+  radioButton.addEventListener('change', handleSelection);
+});
 
-  // Return the progress array
-  return progress;
-}
+// Function to handle form submission
+function handleSubmit(event) {
+  event.preventDefault();
 
-// Function to save score in localStorage
-function saveScore(score) {
+  // Calculate the score
+  let score = 0;
+  for (let i = 0; i < questions.length; i++) {
+    if (userAnswers[i] === questions[i].answer) {
+      score++;
+    }
+  }
+
   // Save the score to localStorage
-  localStorage.setItem('score', score.toString());
+  saveScore(score);
+
+  // Display the score to the user
+  const scoreElement = document.createElement('p');
+  scoreElement.textContent = `Your score is ${score} out of ${questions.length}.`;
+  questionsElement.appendChild(scoreElement);
+
+  // Disable the form after submission
+  submitButton.disabled = true;
 }
 
-// Function to retrieve score from localStorage
-function getScore() {
-  // Retrieve the score from localStorage
-  let score = localStorage.getItem('score');
-
-  // Return the score if it exists, otherwise return 0
-  return score ? parseInt(score) : 0;
-}
+// Add event listener to submit button
+const submitButton = document.getElementById('submit-button');
+submitButton.addEventListener('click', handleSubmit);
 
 // Do not change code below this line
 // This code will just display the questions to the screen
-const questions = [
-  {
-    question: "What is the capital of France?",
-    choices: ["Paris", "London", "Berlin", "Madrid"],
-    answer: "Paris",
-  },
-  {
-    question: "What is the highest mountain in the world?",
-    choices: ["Everest", "Kilimanjaro", "Denali", "Matterhorn"],
-    answer: "Everest",
-  },
-  {
-    question: "What is the largest country by area?",
-    choices: ["Russia", "China", "Canada", "United States"],
-    answer: "Russia",
-  },
-  {
-    question: "Which is the largest planet in our solar system?",
-    choices: ["Earth", "Jupiter", "Mars"],
-    answer: "Jupiter",
-  },
-  {
-    question: "What is the capital of Canada?",
-    choices: ["Toronto", "Montreal", "Vancouver", "Ottawa"],
-    answer: "Ottawa",
-  },
-];
+const questionsElement = document.getElementById('questions');
 
-// Display the quiz questions and choices
 function renderQuestions() {
   for (let i = 0; i < questions.length; i++) {
     const question = questions[i];
-    const questionElement = document.createElement("div");
+    const questionElement = document.createElement('div');
     const questionText = document.createTextNode(question.question);
     questionElement.appendChild(questionText);
     for (let j = 0; j < question.choices.length; j++) {
       const choice = question.choices[j];
-      const choiceElement = document.createElement("input");
-      choiceElement.setAttribute("type", "radio");
-      choiceElement.setAttribute("name", `question-${i}`);
-      choiceElement.setAttribute("value", choice);
+      const choiceElement = document.createElement('input');
+      choiceElement.setAttribute('type', 'radio');
+      choiceElement.setAttribute('name', `question-${i}`);
+      choiceElement.setAttribute('value', choice);
       if (userAnswers[i] === choice) {
-        choiceElement.setAttribute("checked", true);
+        choiceElement.setAttribute('checked', true);
       }
       const choiceText = document.createTextNode(choice);
       questionElement.appendChild(choiceElement);
