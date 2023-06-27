@@ -1,4 +1,38 @@
 //your JS code here.
+function saveProgress(option) {
+  // Retrieve the current progress from sessionStorage or initialize an empty array
+  let progress = JSON.parse(sessionStorage.getItem('progress')) || [];
+
+  // Add the selected option to the progress array
+  progress.push(option);
+
+  // Save the updated progress back to sessionStorage
+  sessionStorage.setItem('progress', JSON.stringify(progress));
+}
+
+// Function to retrieve progress from sessionStorage
+function getProgress() {
+  // Retrieve the progress from sessionStorage
+  let progress = JSON.parse(sessionStorage.getItem('progress')) || [];
+
+  // Return the progress array
+  return progress;
+}
+
+// Function to save score in localStorage
+function saveScore(score) {
+  // Save the score to localStorage
+  localStorage.setItem('score', score.toString());
+}
+
+// Function to retrieve score from localStorage
+function getScore() {
+  // Retrieve the score from localStorage
+  let score = localStorage.getItem('score');
+
+  // Return the score if it exists, otherwise return 0
+  return score ? parseInt(score) : 0;
+}
 
 // Do not change code below this line
 // This code will just display the questions to the screen
